@@ -67,40 +67,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
     // ранее в сессию записан факт успешного логина.
-    if (empty($errors) && !empty($_COOKIE[session_name()]) &&
-        session_start() && !empty($_SESSION['login'])) {
+    if (empty($errors) && !empty($_COOKIE[session_name()]) && session_start() && !empty($_SESSION['login'])) {
+        try {
+            $db = new PDO("mysql:host=$host;dbname=$db_name", $user, $pass, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]);
 
-        $db = new PDO("mysql:host=$host;dbname=$db_name", $user, $pass, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]);
+            $stmt = $db->prepare("SELECT * FROM application WHERE login = ?");
+            $stmt->execute([$_SESSION['login']]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $stmt = $db->prepare("SELECT * FROM application WHERE login = ?");
-        $stmt->execute([$_SESSION['login']]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($row) {
-            // очищаем данные для вывода в HTML, чтобы избежать XSS
-            $values['fullName'] = htmlspecialchars($row['name']);
-            $values['email']    = htmlspecialchars($row['email']);
-            $values['phone']    = htmlspecialchars($row['phone']);
-            $values['bdate']    = htmlspecialchars($row['bday']);
-            $values['gender']   = htmlspecialchars($row['sex']);
-            $values['bio']      = htmlspecialchars($row['bio']);
-            
-            // загружаем языки пользователя из связанной таблицы
-            $stmt_langs = $db->prepare("SELECT language_id FROM application_languages WHERE application_id = ?");
-            $stmt_langs->execute([$row['id']]);
-            
-            // fetchAll(PDO::FETCH_COLUMN) сразу вернет простой массив с ID языков
-            $values['languages'] = $stmt_langs->fetchAll(PDO::FETCH_COLUMN);
+            if ($row) {
+                $values['fullName'] = htmlspecialchars($row['name']);
+                $values['email']    = htmlspecialchars($row['email']);
+                $values['phone']    = htmlspecialchars($row['phone']);
+                $values['bdate']    = htmlspecialchars($row['bday']);
+                $values['gender']   = htmlspecialchars($row['sex']);
+                $values['bio']      = htmlspecialchars($row['bio']);
+                
+                $stmt_langs = $db->prepare("SELECT language_id FROM application_languages WHERE application_id = ?");
+                $stmt_langs->execute([$row['id']]);
+                $values['languages'] = $stmt_langs->fetchAll(PDO::FETCH_COLUMN);
+            }
+        } catch (PDOException $e) {
+            print('Ошибка: ' . $e->getMessage());
+            exit();
         }
-    } catch (PDOException $e) {
-        // В случае ошибки БД можно вывести её (для отладки)
-        print('Ошибка: ' . $e->getMessage());
-        exit();
-    }
-
+        // printf перенесли внутрь IF, чтобы не ругался на пустую сессию
         printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
+    }
     }
     include('form.php');
 } 
