@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 
     $values = array();
-    $all_fields = ['fullName', 'email', 'phone', 'bdate', 'gender', 'bio', 'privacy'];
+    $all_fields = ['fullName', 'email', 'number', 'bdate', 'gender', 'bio', 'privacy'];
     foreach ($all_fields as $f) {
         $values[$f] = empty($_COOKIE[$f . '_value']) ? '' : $_COOKIE[$f . '_value'];
     }
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             if ($row) {
                 $values['fullName'] = htmlspecialchars($row['name']);
                 $values['email']    = htmlspecialchars($row['email']);
-                $values['phone']    = htmlspecialchars($row['phone']);
+                $values['number']    = htmlspecialchars($row['number']);
                 $values['bdate']    = htmlspecialchars($row['bday']);
                 $values['gender']   = htmlspecialchars($row['sex']);
                 $values['bio']      = htmlspecialchars($row['bio']);
@@ -114,7 +114,7 @@ else {
         setcookie('languages_value', implode(',', $_POST['languages']), time() + 30 * 24 * 3600);
     }
 
-    setcookie('phone_value', $_POST['phone'], time() + 30 * 24 * 3600);
+    setcookie('number_value', $_POST['number'], time() + 30 * 24 * 3600);
     setcookie('bdate_value', $_POST['bdate'], time() + 30 * 24 * 3600);
     setcookie('gender_value', $_POST['gender'], time() + 30 * 24 * 3600);
     setcookie('privacy_value', $_POST['privacy'], time() + 30 * 24 * 3600);
@@ -145,7 +145,7 @@ else {
                     $sql = "UPDATE application SET
                             name = ?,
                             email = ?,
-                            phone = ?,
+                            number = ?,
                             bday = ?,
                             sex = ?,
                             bio = ?
@@ -155,7 +155,7 @@ else {
                     $stmt->execute([
                         $_POST['fullName'],
                         $_POST['email'],
-                        $_POST['phone'],
+                        $_POST['number'],
                         $_POST['bdate'],
                         $_POST['gender'],
                         $_POST['bio'],
@@ -181,8 +181,8 @@ else {
                 setcookie('pass', $pass_plain, time() + 30 * 24 * 3600);
 
                 // Исправлено: добавлены login и password в INSERT
-                $stmt = $db->prepare("INSERT INTO application (name, email, phone, bday, sex, bio, login, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$_POST['fullName'], $_POST['email'], $_POST['phone'], $_POST['bdate'], $_POST['gender'], $_POST['bio'], $login, $pass_hash]);
+                $stmt = $db->prepare("INSERT INTO application (name, email, number, bday, sex, bio, login, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$_POST['fullName'], $_POST['email'], $_POST['number'], $_POST['bdate'], $_POST['gender'], $_POST['bio'], $login, $pass_hash]);
 
                 $id = $db->lastInsertId();
 
