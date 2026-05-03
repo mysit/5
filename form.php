@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+    <title>Форма регистрации</title>
+    <style>
+        /* Стиль для подсвечивания ошибок */
+        .field-error { border: 2px solid red; }
+        .error-msg { color: red; font-size: 0.8em; display: block; }
+        .success-msg { color: green; font-weight: bold; margin-bottom: 15px; }
+    </style>
 </head>
 <body>
     <div class="form" id="form-container">
-
-    <?php
+        
+        <?php
+        // Вывод сообщений (успех или общие ошибки)
         if (!empty($messages)) {
             foreach ($messages as $msg) {
                 echo $msg;
@@ -20,82 +24,85 @@
         }
         ?>
 
-        <form id="contactForm">
+        <form action="index.php" method="POST" id="contactForm">
             <div class="form-group">
                 <label for="fullName" class="required">ФИО</label>
-                <input type="text" id="fullName" name="fullName"  placeholder="Введите ваше полное имя"
+                <input type="text" id="fullName" name="fullName" 
+                    placeholder="Введите ваше полное имя"
                     class="<?php echo $errors['fullName'] ? 'field-error' : ''; ?>"
-                    value="<?php echo htmlspecialchars($values['fullName']); ?>">>
-                </div>
+                    value="<?php echo htmlspecialchars($values['fullName']); ?>">
+            </div>
 
             <div class="form-group">
                 <label for="email" class="required">Email</label>
-                <input type="email" id="email" name="email"  placeholder="example@domain.com"
+                <input type="email" id="email" name="email" 
+                    placeholder="example@domain.com"
                     class="<?php echo $errors['email'] ? 'field-error' : ''; ?>"
-                    value="<?php echo htmlspecialchars($values['email']); ?>">>
+                    value="<?php echo htmlspecialchars($values['email']); ?>">
             </div>
 
             <div class="form-group">
-                <label for="phone">Телефон</label>
-                <input type="tel" id="phone" name="phone" placeholder="+7 (XXX) XXX-XX-XX"
-                    value="<?php echo htmlspecialchars($values['phone']); ?>">>
-            </div>
+    <label for="number">Телефон</label>
+    <input type="tel" id="number" name="number" 
+        placeholder="+7 (XXX) XXX-XX-XX"
+        value="<?php echo htmlspecialchars($values['number']); ?>">
+</div>
 
             <div class="form-group">
                 <label for="bdate">Дата рождения</label>
-                <input type="date" id="bdate" name="bdate" placeholder="bday"
-                    value="<?php echo htmlspecialchars($values['bday'])?>">>
+                <input type="date" id="bdate" name="bdate" 
+                    value="<?php echo htmlspecialchars($values['bdate']); ?>">
             </div>
 
             <div class="form-group">
                 <label>Пол</label>
-                <div>
-                    <input type="radio" id="gender-male" name="gender" value="male"
-                    <?php echo $values['gender'] == 'male' ? 'checked' : ''; ?>>>
+                <div class="<?php echo $errors['gender'] ? 'field-error' : ''; ?>">
+                    <input type="radio" id="gender-male" name="gender" value="male" 
+                        <?php echo $values['gender'] == 'male' ? 'checked' : ''; ?>>
                     <label for="gender-male">Мужской</label>
                     
-                    <input type="radio" id="gender-female" name="gender" value="female"
-                    <?php echo $values['gender'] == 'female' ? 'checked' : ''; ?>>>
+                    <input type="radio" id="gender-female" name="gender" value="female" 
+                        <?php echo $values['gender'] == 'female' ? 'checked' : ''; ?>>
                     <label for="gender-female">Женский</label>
                 </div>
             </div>
 
-        <div class="form-group">
-        <label for="languages">Любимый язык программирования:</label>
-        <select id="languages" name="languages[]" multiple="multiple"  size="5"
-        class="<?php echo $errors['languages'] ? 'field-error' : ''; ?>">
-            <?php
-            $langs = [
-                'pascal' => 'Pascal',
-                'c' => 'C',
-                'cpp' => 'C++',
-                'js' => 'JavaScript',
-                'php' => 'PHP',
-                'python' => 'Python'
-            ];
-            foreach ($langs as $key => $label){
-                $selected = in_array($key, $values['languages']) ? 'selected' : '';
-                echo "<option value=\"$key\" $selected>$label</option>";
-            }
-            ?>
-        </select>
-    </div>
+            <div class="form-group">
+                <label for="languages">Любимые языки:</label>
+                <select id="languages" name="languages[]" multiple="multiple" size="5"
+                    class="<?php echo $errors['languages'] ? 'field-error' : ''; ?>">
+                    <?php
+                    $langs = [
+                        '1a0caebb-268b-11f1-a59b-bc241103b411' => 'Pascal',
+                        '1a0cb9c9-268b-11f1-a59b-bc241103b411"' => 'C',
+                        '1a0cbde6-268b-11f1-a59b-bc241103b411' => 'C++',
+                        '1a0cbf43-268b-11f1-a59b-bc241103b411' => 'JavaScript',
+                        '1a0cc059-268b-11f1-a59b-bc241103b411' => 'PHP',
+                        '1a0cc194-268b-11f1-a59b-bc241103b411' => 'Python',
+                        '1a0cc290-268b-11f1-a59b-bc241103b411' => 'Java',
+                        '1a0cc367-268b-11f1-a59b-bc241103b411' => 'Haskell'
+                    ];
+                    foreach ($langs as $key => $label) {
+                        $selected = in_array($key, $values['languages']) ? 'selected' : '';
+                        echo "<option value=\"$key\" $selected>$label</option>";
+                    }
+                    ?>
+                </select>
+            </div>
 
             <div class="form-group">
                 <label for="bio" class="required">Биография</label>
-                <textarea id="bio" name="bio"  placeholder="Опишите вас..." class="
-                <?php echo $errors['bio'] ? 'field-error' : ''; ?>">
-                <?php echo htmlspecialchars($values['bio']); ?>></textarea>
+                <textarea id="bio" name="bio" 
+                    class="<?php echo $errors['bio'] ? 'field-error' : ''; ?>"><?php echo htmlspecialchars($values['bio']); ?></textarea>
             </div>
 
             <div class="checkbox-container">
-                <input type="checkbox" id="privacy" name="privacy" value = "ok"
-                <?php echo !empty($values['privacy']) ? 'checked' : ''; ?>>
-                <label for="privacy">
-                    С контрактом ознакомлен.
-                </label>
+                <input type="checkbox" id="privacy" name="privacy" value="ok"
+                    <?php echo !empty($values['privacy']) ? 'checked' : ''; ?>>
+                <label for="privacy">С контрактом ознакомлен.</label>
             </div>
-            <button type="submit" id="submit_form" class="form_btn">Сохранить</button>
+
+            <button type="submit" class="form_btn">Сохранить</button>
         </form>
     </div>
 </body>
