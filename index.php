@@ -7,6 +7,9 @@ $db_name = 'u82196';
 $host = 'localhost';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    if (!empty($_COOKIE[session_name()])) {
+        session_start();
+    }
     $messages = array();
 
     if (!empty($_COOKIE['save'])) {
