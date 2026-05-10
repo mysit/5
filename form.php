@@ -13,6 +13,12 @@
     </style>
 </head>
 <body>
+<?php if (!empty($_SESSION['login'])): ?>
+    <div style="text-align: right; margin-bottom: 20px; padding: 10px; background: #f8f9fa; border-radius: 4px;">
+        Вы вошли как: <strong><?php echo $_SESSION['login']; ?></strong> | 
+        <a href="login.php?do=logout" style="color: #dc3545; text-decoration: none; font-weight: bold;">Выйти</a>
+    </div>
+<?php endif; ?>
     <div class="form" id="form-container">
         
         <?php
